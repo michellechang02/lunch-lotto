@@ -6,7 +6,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
       // Create a notification
       chrome.notifications.create({
         type: "basic",
-        iconUrl: "icon-128.png",
+        iconUrl: "icon.png",
         title: "Time to Relax Your Eyes!",
         message: "Take a 1-minute break. Try blinking slowly or focusing on a distant object.",
         priority: 2
