@@ -27,9 +27,24 @@ async function fetchRestaurants() {
 
     const response = await fetch(url);
     const data = await response.json();
-    const restaurants = data.results.map((place) => place.name).slice(0, 8);
+    const restaurants = data.results.map((place) => place.name);
 
-    updateWheel(restaurants);
+    // Remove duplicate restaurants by name
+    const uniqueRestaurants = removeDuplicates(restaurants);
+
+    updateWheel(uniqueRestaurants.slice(0, 8));  // Ensure only 8 options are displayed
+  });
+}
+
+function removeDuplicates(restaurants) {
+  const seen = new Set();
+  return restaurants.filter((restaurant) => {
+    const name = restaurant.toLowerCase().trim();  // Normalize case and whitespace
+    if (seen.has(name)) {
+      return false;  // Ignore duplicate entry
+    }
+    seen.add(name);
+    return true;  // Keep unique entry
   });
 }
 
