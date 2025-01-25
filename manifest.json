@@ -11,10 +11,6 @@
     "action": {
       "default_popup": "popup.html",
       "default_icon": "assets/icon.png"
-    },
-    "options_ui": {
-  "page": "options.html",
-  "open_in_tab": false
-}
+    }
   }
   
