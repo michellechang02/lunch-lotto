@@ -10,6 +10,25 @@ let spinAngleStart = 0;
 let spinTime = 0;
 let spinTimeTotal = 0;
 
+function scaleCanvas(canvas, ctx) {
+    const pixelRatio = window.devicePixelRatio || 1;
+  
+    // Save the original canvas dimensions
+    const width = canvas.width;
+    const height = canvas.height;
+  
+    // Set the canvas width and height to the scaled dimensions
+    canvas.width = width * pixelRatio;
+    canvas.height = height * pixelRatio;
+  
+    // Scale the canvas context
+    // ctx.scale(pixelRatio, pixelRatio);
+  
+    // Restore the original canvas dimensions for CSS styling
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+  }
+  
 function isColorDark(color) {
     // Convert hex color to RGB
     const hex = color.replace("#", "");
@@ -37,7 +56,7 @@ function drawWheel() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before redrawing
     
     // Set the font size and style
-    ctx.font = "12px Roboto";
+    ctx.font = "24px Roboto";
   
     options.forEach((option, i) => {
       const truncatedOption = truncateOption(option); // Truncate the option if necessary
@@ -68,7 +87,7 @@ function drawWheel() {
         canvas.height / 2 + Math.sin(angle + arc / 2) * (canvas.height / 2 - 40)
       );
       ctx.rotate(angle + arc / 2);
-      ctx.fillText(truncatedOption, -ctx.measureText(truncatedOption).width / 4 * 3, 0); // Use truncated option
+      ctx.fillText(truncatedOption, -ctx.measureText(truncatedOption).width, 0); // Use truncated option
       ctx.restore();
     });
   
@@ -77,28 +96,50 @@ function drawWheel() {
   }  
 
 function drawPointer() {
-    ctx.fillStyle = "purple";
+    ctx.fillStyle = "#F2C100";
     ctx.beginPath();
-    ctx.moveTo(canvas.width / 2 - 10, 0); // Left corner of the pointer
-    ctx.lineTo(canvas.width / 2 + 10, 0); // Right corner of the pointer
-    ctx.lineTo(canvas.width / 2, 30); // Bottom tip of the pointer
+    ctx.moveTo(canvas.width / 2 - 20, 0); // Left corner of the pointer
+    ctx.lineTo(canvas.width / 2 + 20, 0); // Right corner of the pointer
+    ctx.lineTo(canvas.width / 2, 60); // Bottom tip of the pointer
     ctx.closePath();
     ctx.fill();
   }
 
-function rotateWheel() {
-  spinTime += 30; // Increment spin time
-  if (spinTime >= spinTimeTotal) {
-    finalizeWheel(); // Stop spinning and finalize the result
-    return;
+  function rotateWheel() {
+    spinTime += 30;
+    if (spinTime >= spinTimeTotal) {
+      clearTimeout(spinTimeout);
+  
+      // Calculate the winning segment based on the final angle
+      const degrees = (startAngle * 180) / Math.PI + 90;
+      const normalizedDegrees = degrees % 360;
+      const selectedIndex = Math.floor(normalizedDegrees / (360 / options.length));
+      const selectedOption = options[options.length - 1 - selectedIndex];
+  
+      // Motivational messages to encourage the user
+      const messages = [
+        "Time to fuel your body with something nutritious! 🍎",
+        "Great choice! Enjoy your healthy meal. 🌱",
+        "A healthy lunch keeps the energy flowing! 💪",
+        "Your body will thank you for this meal. 🥗",
+        "Eating healthy today sets you up for success! 🏆",
+        "Tasty and healthy? You've got it! 🍽️",
+        "Healthy food, happy mood! 😊",
+      ];
+  
+      // Select a random motivational message
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+  
+      // Show result + motivational message
+      alert(`Selected option: ${selectedOption}\n\n${randomMessage}`);
+  
+      return;
+    }
+  
+    startAngle += (spinAngleStart * Math.PI) / 180;
+    drawWheel();
+    spinTimeout = setTimeout(rotateWheel, 30);
   }
-
-  spinAngleStart *= 0.98; // Gradually reduce spin speed for a smooth stop
-  startAngle += spinAngleStart * Math.PI / 180;
-  drawWheel();
-
-  spinTimeout = setTimeout(rotateWheel, 30); // Continue spinning
-}
 
 function finalizeWheel() {
   const degrees = (startAngle * 180) / Math.PI + 90; // Convert radians to degrees
@@ -116,4 +157,5 @@ function spin() {
 }
 
 document.getElementById("spin").addEventListener("click", () => spin());
+scaleCanvas(canvas, ctx);
 drawWheel();
