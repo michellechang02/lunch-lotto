@@ -15,9 +15,6 @@ html, body {
     margin: 0;
   }  
   
-  #wheel-container {
-    text-align: center;
-  }
   
   canvas {
     border-radius: 50%;
@@ -30,9 +27,9 @@ html, body {
   
   button {
     font-family: 'Poppins', sans-serif;
-    margin-top: 20px;
+    margin-top: 30px;
     padding: 10px 20px;
-    background-color: #011F5B;
+    background-color: #060707;
     color: white;
     border: none;
     border-radius: 5px;
@@ -40,7 +37,7 @@ html, body {
   }
   
   button:hover {
-    background-color: #2f4fff;
+    background-color: #0f0f13;
   }
   
 /* Style for the Settings Button */
@@ -63,4 +60,30 @@ html, body {
 
 #open-settings img:hover {
   transform: scale(1.1); /* Slightly enlarge on hover for interactivity */
-} 
+}
+
+    background-color:rgb(61, 69, 119);
+  
+/* 🎡 Ensure `wheel-container` is positioned relative */
+#wheel-container {
+  position: relative;  /* ✅ This makes the GIF position relative to the wheel */
+  text-align: center;
+  width: 100%; /* ✅ Prevents overflow */
+  height: 300px; /* ✅ Matches wheel size */
+  overflow: hidden; /* ✅ Ensures GIF doesn't overflow */
+}
+
+/* 🔄 Loading GIF: Centered Inside the Wheel */
+#loading-gif {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;  /* ✅ Adjust size */
+  height: 300px;
+  max-width: 500px;  /* ✅ Prevents it from getting too large */
+  max-height: 500px;
+  transform: translate(-50%, -50%);  /* ✅ Centers it */
+  z-index: 3;  /* ✅ Ensures it's above the wheel */
+  display: none; /* ✅ Hide initially */
+  pointer-events: none; /* ✅ Prevent interaction */
+}
