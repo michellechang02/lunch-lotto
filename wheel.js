@@ -2,7 +2,7 @@ const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
 const options = ["", "", "", "", "", "", "", ""];
-const colors = ["#990000", "#F2F2F2", "#011F5B", "#F2F2F2"];
+const colors = ["#163832", "#8EB69B", "#DAF1DE", "#235347"];
 let startAngle = 0;
 let arc = 2 * Math.PI / options.length;
 let spinTimeout = null;
@@ -141,12 +141,6 @@ function drawPointer() {
     spinTimeout = setTimeout(rotateWheel, 30);
   }
 
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> e632e932f80182d74337f6e298784bd16fdbe607
 function finalizeWheel() {
   const degrees = (startAngle * 180) / Math.PI + 90; // Convert radians to degrees
   const index = Math.floor((360 - (degrees % 360)) / (360 / options.length)); // Calculate the selected segment
