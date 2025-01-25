@@ -55,8 +55,8 @@ body {
 }
 
 #open-settings img {
-  width: 25px; /* Adjust size to fit design */
-  height: 25px; /* Adjust size to fit design */
+  width: 20px; /* Adjust size to fit design */
+  height: 20px; /* Adjust size to fit design */
   transition: transform 0.2s ease; /* Smooth hover animation */
 }
 
