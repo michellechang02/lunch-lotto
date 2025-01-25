@@ -23,16 +23,25 @@ async function fetchRestaurants() {
     const { latitude: lat, longitude: lng } = position.coords;
     const settings = await loadSettings();
 
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${milesToMeters(settings.distance)}&type=restaurant&keyword=healthy&minprice=${settings.price[0]}&maxprice=${settings.price[2]}&key=${apiKey}`;
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${milesToMeters(settings.distance)}&type=restaurant&keyword=healthy&minprice=${settings.price[0]}&maxprice=${settings.price[2]}&fields=name,opening_hours&key=${apiKey}`;
 
-    const response = await fetch(url);
-    const data = await response.json();
-    const restaurants = data.results.map((place) => place.name);
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
 
-    // Remove duplicate restaurants by name
-    const uniqueRestaurants = removeDuplicates(restaurants);
+      // Filter out places that are closed
+      const openRestaurants = data.results
+        .filter((place) => place.opening_hours && place.opening_hours.open_now)
+        .map((place) => place.name);
 
-    updateWheel(uniqueRestaurants.slice(0, 8));  // Ensure only 8 options are displayed
+      // Remove duplicate restaurants and update the wheel
+      const uniqueRestaurants = removeDuplicates(openRestaurants);
+      updateWheel(uniqueRestaurants.slice(0, 8));  // Limit to 8 options
+
+    } catch (error) {
+      console.error("Error fetching restaurant data:", error);
+      alert("Failed to fetch restaurant data. Please try again.");
+    }
   });
 }
 
