@@ -1,4 +1,4 @@
-const apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+const apiKey = "AIzaSyDhj7No-w02oGe3eJBjXoNJiFNTaoVARaA";
 
 async function fetchRestaurants() {
   navigator.geolocation.getCurrentPosition(async (position) => {
