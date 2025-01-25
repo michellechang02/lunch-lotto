@@ -1,12 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
 body {
-    font-family: Roboto;
+    border-radius: 10px;    
+    font-family: 'Poppins', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 500px;
-    width: 350px;
-    background-color: #f2f2f2;
+    width: 400px;
     margin: 0;
   }
   
@@ -16,14 +18,15 @@ body {
   
   canvas {
     border-radius: 50%;
-    border: 5px solid #ddd;
+    border: 10px solid #fff;
     width: 300px; /* Layout width */
     height: 300px; /* Layout height */
     display: block; 
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
   }
   
   button {
-    font-family: Roboto;
+    font-family: 'Poppins', sans-serif;
     margin-top: 20px;
     padding: 10px 20px;
     background-color: #011F5B;
@@ -35,5 +38,32 @@ body {
   
   button:hover {
     background-color: #2f4fff;
+  }
+  
+
+
+/* Style for the Settings Button */
+#open-settings {
+  background: none; /* No default button background */
+  border: none; /* Remove default border */
+  margin: 10px; /* Add margin to separate it from other elements */
+  cursor: pointer; /* Change cursor to pointer */
+  padding: 0; /* No padding for the image */
+  position: absolute; /* Allow precise positioning */
+  top: 10px; /* Distance from the top of the container */
+  right: 10px; /* Distance from the right edge of the container */
+}
+
+#open-settings img {
+  width: 20px; /* Adjust size to fit design */
+  height: 20px; /* Adjust size to fit design */
+  transition: transform 0.2s ease; /* Smooth hover animation */
+}
+
+#open-settings img:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover for interactivity */
+}
+
+    background-color:rgb(61, 69, 119);
   }
   
