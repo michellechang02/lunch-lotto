@@ -46,16 +46,16 @@ async function fetchRestaurants() {
 }
 
 function removeDuplicates(restaurants) {
-  const seen = new Set();
-  return restaurants.filter((restaurant) => {
-    const name = restaurant.toLowerCase().trim();  // Normalize case and whitespace
-    if (seen.has(name)) {
-      return false;  // Ignore duplicate entry
-    }
-    seen.add(name);
-    return true;  // Keep unique entry
-  });
-}
+    const seen = new Set();
+    return restaurants.filter((restaurant) => {
+      const name = restaurant.toLowerCase().trim().replace(/[^\w\s]/gi, ""); // Remove special characters
+      if (seen.has(name)) {
+        return false; // Ignore duplicate entry
+      }
+      seen.add(name);
+      return true; // Keep unique entry
+    });
+  }  
 
 function updateWheel(restaurants) {
   options.length = 0;
