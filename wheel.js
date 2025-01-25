@@ -32,30 +32,6 @@ function truncateOption(option) {
     }
     return option; // Return the original string if it's 15 characters or less
   }  
-
-  function setHighDPI(canvas, context) {
-    const devicePixelRatio = window.devicePixelRatio || 1;
-    const backingStoreRatio = context.webkitBackingStorePixelRatio ||
-                              context.mozBackingStorePixelRatio ||
-                              context.msBackingStorePixelRatio ||
-                              context.oBackingStorePixelRatio ||
-                              context.backingStorePixelRatio || 1;
-  
-    const ratio = devicePixelRatio / backingStoreRatio;
-  
-    // Save the original canvas dimensions
-    const width = canvas.width;
-    const height = canvas.height;
-  
-    // Scale the canvas
-    canvas.width = width * ratio;
-    canvas.height = height * ratio;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-  
-    // Scale the drawing context
-    context.scale(ratio, ratio);
-  }
   
 function drawWheel() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before redrawing
@@ -101,7 +77,7 @@ function drawWheel() {
   }  
 
 function drawPointer() {
-    ctx.fillStyle = "#F2C100";
+    ctx.fillStyle = "purple";
     ctx.beginPath();
     ctx.moveTo(canvas.width / 2 - 10, 0); // Left corner of the pointer
     ctx.lineTo(canvas.width / 2 + 10, 0); // Right corner of the pointer

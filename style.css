@@ -4,7 +4,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 400px;
+    height: 500px;
     width: 350px;
     margin: 0;
   }
@@ -16,6 +16,8 @@ body {
   canvas {
     border-radius: 50%;
     border: 5px solid #ddd;
+    width: 300px; /* Layout width */
+    height: 300px; /* Layout height */
   }
   
   button {
