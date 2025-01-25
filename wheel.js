@@ -1,7 +1,7 @@
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
-const options = ["Yes", "No", "Yes", "No", "Yes", "No", "Yes", "No"]; // Temporary
+const options = ["Loading...", "", "", "", "", "", "", ""];
 const colors = ["#ffcccb", "#b0e57c", "#fdfd96", "#add8e6"];
 let startAngle = 0;
 let arc = Math.PI / (options.length / 2);
@@ -11,6 +11,7 @@ let spinTime = 0;
 let spinTimeTotal = 0;
 
 function drawWheel() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before redrawing
   options.forEach((option, i) => {
     const angle = startAngle + i * arc;
     ctx.fillStyle = colors[i % colors.length];
@@ -35,21 +36,47 @@ function drawWheel() {
     ctx.fillText(option, -ctx.measureText(option).width / 2, 0);
     ctx.restore();
   });
+
+  // Draw the pointer at the top
+  drawPointer();
 }
 
+function drawPointer() {
+    ctx.fillStyle = "purple";
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2 - 10, 5); // Left corner of the pointer
+    ctx.lineTo(canvas.width / 2 + 10, 5); // Right corner of the pointer
+    ctx.lineTo(canvas.width / 2, 30); // Bottom tip of the pointer
+    ctx.closePath();
+    ctx.fill();
+  }
+
 function rotateWheel() {
-  spinAngleStart += 10;
+  spinTime += 30; // Increment spin time
+  if (spinTime >= spinTimeTotal) {
+    finalizeWheel(); // Stop spinning and finalize the result
+    return;
+  }
+
+  spinAngleStart *= 0.98; // Gradually reduce spin speed for a smooth stop
   startAngle += spinAngleStart * Math.PI / 180;
   drawWheel();
-  if (spinTime < spinTimeTotal) {
-    spinTimeout = setTimeout(rotateWheel, 30);
-  }
+
+  spinTimeout = setTimeout(rotateWheel, 30); // Continue spinning
+}
+
+function finalizeWheel() {
+  const degrees = (startAngle * 180) / Math.PI + 90; // Convert radians to degrees
+  const index = Math.floor((360 - (degrees % 360)) / (360 / options.length)); // Calculate the selected segment
+  const selectedOption = options[index];
+  
+  alert(`Selected option: ${selectedOption}`); // Display the result
 }
 
 function spin() {
   spinAngleStart = Math.random() * 10 + 10;
   spinTime = 0;
-  spinTimeTotal = Math.random() * 3 + 3 * 1000;
+  spinTimeTotal = Math.random() * 3000 + 3000; // Spin duration between 3-6 seconds
   rotateWheel();
 }
 
