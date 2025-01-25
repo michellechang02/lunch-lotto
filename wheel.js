@@ -51,19 +51,44 @@ function drawPointer() {
     ctx.fill();
   }
 
-function rotateWheel() {
-  spinTime += 30; // Increment spin time
-  if (spinTime >= spinTimeTotal) {
-    finalizeWheel(); // Stop spinning and finalize the result
-    return;
+  function rotateWheel() {
+    spinTime += 30;
+    if (spinTime >= spinTimeTotal) {
+      clearTimeout(spinTimeout);
+  
+      // Calculate the winning segment based on the final angle
+      const degrees = (startAngle * 180) / Math.PI + 90;
+      const normalizedDegrees = degrees % 360;
+      const selectedIndex = Math.floor(normalizedDegrees / (360 / options.length));
+      const selectedOption = options[options.length - 1 - selectedIndex];
+  
+      // Motivational messages to encourage the user
+      const messages = [
+        "Time to fuel your body with something nutritious! 🍎",
+        "Great choice! Enjoy your healthy meal. 🌱",
+        "A healthy lunch keeps the energy flowing! 💪",
+        "Your body will thank you for this meal. 🥗",
+        "Eating healthy today sets you up for success! 🏆",
+        "Tasty and healthy? You've got it! 🍽️",
+        "Healthy food, happy mood! 😊",
+      ];
+  
+      // Select a random motivational message
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+  
+      // Show result + motivational message
+      alert(`Selected option: ${selectedOption}\n\n${randomMessage}`);
+  
+      return;
+    }
+  
+    startAngle += (spinAngleStart * Math.PI) / 180;
+    drawWheel();
+    spinTimeout = setTimeout(rotateWheel, 30);
   }
 
-  spinAngleStart *= 0.98; // Gradually reduce spin speed for a smooth stop
-  startAngle += spinAngleStart * Math.PI / 180;
-  drawWheel();
 
-  spinTimeout = setTimeout(rotateWheel, 30); // Continue spinning
-}
+
 
 function finalizeWheel() {
   const degrees = (startAngle * 180) / Math.PI + 90; // Convert radians to degrees
