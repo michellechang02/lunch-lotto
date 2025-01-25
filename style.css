@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 body {
+    font-family: Roboto;
+    border-radius: 10px;    
     font-family: 'Poppins', sans-serif;
     display: flex;
     flex-direction: column;
@@ -36,6 +38,33 @@ body {
   }
   
   button:hover {
+    background-color: #2f4fff;
+  }
+  
+
+
+/* Style for the Settings Button */
+#open-settings {
+  background: none; /* No default button background */
+  border: none; /* Remove default border */
+  margin: 10px; /* Add margin to separate it from other elements */
+  cursor: pointer; /* Change cursor to pointer */
+  padding: 0; /* No padding for the image */
+  position: absolute; /* Allow precise positioning */
+  top: 10px; /* Distance from the top of the container */
+  right: 10px; /* Distance from the right edge of the container */
+}
+
+#open-settings img {
+  width: 25px; /* Adjust size to fit design */
+  height: 25px; /* Adjust size to fit design */
+  transition: transform 0.2s ease; /* Smooth hover animation */
+}
+
+#open-settings img:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover for interactivity */
+}
+
     background-color:rgb(61, 69, 119);
   }
   
