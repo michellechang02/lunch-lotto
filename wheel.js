@@ -2,7 +2,8 @@ const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
 const options = ["", "", "", "", "", "", "", ""];
-const colors = ["#990000", "#F2F2F2", "#011F5B", "#F2F2F2"];
+const colors = ["#F69C9E", "#BCECE6", "#73D5D1", "#FFEED9"];
+// #051F20 #0B2B26 #163832 #235347 #8EB69B #DAF1DE #F2F2F2
 let startAngle = 0;
 let arc = 2 * Math.PI / options.length;
 let spinTimeout = null;
@@ -52,11 +53,11 @@ function truncateOption(option) {
     return option; // Return the original string if it's 15 characters or less
   }  
   
-function drawWheel() {
+  function drawWheel() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before redrawing
-    
+  
     // Set the font size and style
-    ctx.font = "24px Roboto";
+    ctx.font = "bold 24px Poppins";
   
     options.forEach((option, i) => {
       const truncatedOption = truncateOption(option); // Truncate the option if necessary
@@ -91,20 +92,63 @@ function drawWheel() {
       ctx.restore();
     });
   
-    // Draw the pointer
+    // Draw the pointer and center circle
     drawPointer();
+    drawCenterCircle();
   }  
 
-function drawPointer() {
-    ctx.fillStyle = "#F2C100";
+  function drawCenterCircle() {
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+  
+    // Set shadow properties
+    ctx.save();
+    ctx.shadowBlur = 15; // Shadow blur amount
+    ctx.shadowColor = "rgba(0, 0, 0, 0.25)"; // Shadow color
+  
+    // Draw the shadowed circle
     ctx.beginPath();
-    ctx.moveTo(canvas.width / 2 - 20, 0); // Left corner of the pointer
-    ctx.lineTo(canvas.width / 2 + 20, 0); // Right corner of the pointer
-    ctx.lineTo(canvas.width / 2, 60); // Bottom tip of the pointer
-    ctx.closePath();
+    ctx.arc(centerX, centerY, 50, 0, 2 * Math.PI); // Adjust radius as needed
+    ctx.fillStyle = "white"; // Center circle color
     ctx.fill();
+    ctx.restore();
+  
+    // Add a border to the center circle (optional)
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, 50, 0, 2 * Math.PI);
+    ctx.lineWidth = 5; // Border width
+    ctx.strokeStyle = "#fff"; // Border color
+    ctx.stroke();
   }
 
+  function drawPointer() {
+    const centerX = canvas.width / 2; // Center of the canvas
+  
+    // Set shadow properties for the pointer
+    ctx.save(); // Save the current context state
+    ctx.shadowBlur = 15; // Blur amount for the shadow
+    ctx.shadowColor = "rgba(0, 0, 0, 0.25)"; // Shadow color (semi-transparent black)
+    ctx.shadowOffsetX = 0; // Horizontal shadow offset
+    ctx.shadowOffsetY = 5; // Vertical shadow offset
+  
+    // Draw the pointer
+    ctx.beginPath();
+    ctx.moveTo(centerX - 30, 0); // Left corner of the pointer
+    ctx.lineTo(centerX + 30, 0); // Right corner of the pointer
+    ctx.lineTo(centerX, 80); // Bottom tip of the pointer
+    ctx.closePath();
+  
+    // Fill the pointer
+    ctx.fillStyle = "#000000"; // Pointer color
+    ctx.fill();
+  
+    // Add a border (with shadow)
+    ctx.lineWidth = 15; // Border thickness
+    ctx.strokeStyle = "#ffffff"; // Border color
+    ctx.stroke();
+    ctx.restore(); // Restore the context state to remove shadow effects for subsequent drawings
+  }  
+  
   function rotateWheel() {
     spinTime += 30;
     if (spinTime >= spinTimeTotal) {
