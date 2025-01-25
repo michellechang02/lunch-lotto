@@ -1,6 +1,5 @@
 const apiKey = "AIzaSyDhj7No-w02oGe3eJBjXoNJiFNTaoVARaA";
 const defaultSettings = {
-  name: "Guest",
   distance: 0.5,       // Default search radius in miles
   price: "2,3",        // Google Places API uses 1-4 ($ - $$$$)
   dietary: "",         // Empty means no filter (future: vegetarian, gluten-free, etc.)
@@ -18,11 +17,7 @@ async function loadSettings() {
     });
   });
 }
-// 🏆 Update greeting message with the user's name
-async function updateGreeting() {
-  const settings = await loadSettings();
-  document.getElementById("greeting").textContent = `Hello, ${settings.name}. Time for a healthy meal!`;
-}
+
 async function fetchRestaurants() {
   navigator.geolocation.getCurrentPosition(async (position) => {
     const { latitude: lat, longitude: lng } = position.coords;

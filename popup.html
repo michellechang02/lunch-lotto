@@ -9,8 +9,9 @@
 <body>
 
   <!-- 🏆 Personalized Greeting -->
+  <div id="caption-box">
   <h2 id="greeting">Hello, Guest. Time for a healthy meal!</h2>
-
+</div>
   <div id="popup-container">
     <!-- 🎡 Main View -->
     <div id="main-view">
@@ -18,9 +19,17 @@
         <canvas id="wheel" width="300" height="300"></canvas>
         <button id="spin">Spin</button>
       </div>
-      <button id="open-settings">Settings</button>
+      <!-- 🏆 Selected Restaurant Result -->
+  <div id="result-container" style="display: none;">
+    <p id="selected-restaurant"></p>
+    <a id="google-maps-link" href="#" target="_blank" style="display: none;">View on Google Maps</a>
+  </div>
+      <!-- <button id="open-settings">Settings</button> -->
+      <button id="open-settings">
+        <img src="assets/filter.jpg" alt="Settings">
+      </button>   
     </div>
-
+    
     <!-- ⚙️ Settings View (Hidden by Default) -->
     <div id="settings-view" style="display: none;">
       <h3>Settings</h3>
@@ -41,6 +50,7 @@
       <button id="save-settings">Save</button>
       <button id="close-settings">Back</button>
     </div>
+
   </div>
 
   <script src="wheel.js"></script>
