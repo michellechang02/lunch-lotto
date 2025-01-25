@@ -117,3 +117,4 @@ function spin() {
 
 document.getElementById("spin").addEventListener("click", () => spin());
 drawWheel();
+
