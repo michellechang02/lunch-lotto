@@ -15,7 +15,6 @@ html, body {
     margin: 0;
   }  
   
-  
   canvas {
     border-radius: 50%;
     border: 10px solid #fff;
@@ -27,13 +26,15 @@ html, body {
   
   button {
     font-family: 'Poppins', sans-serif;
-    margin-top: 30px;
+    margin-top: 26px;
+    margin-left: 60px;
     padding: 10px 20px;
     background-color: #060707;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
+    width: 60%;
   }
   
   button:hover {
@@ -50,6 +51,7 @@ html, body {
   position: absolute; /* Allow precise positioning */
   top: 10px; /* Distance from the top of the container */
   right: 10px; /* Distance from the right edge of the container */
+  width: 30px;
 }
 
 #open-settings img {

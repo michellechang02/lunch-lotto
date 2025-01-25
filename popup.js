@@ -33,6 +33,7 @@ async function loadSettings() {
 //     updateWheel(restaurants);
 //   });
 // }
+
 async function fetchRestaurants() {
   try {
     // 🔄 Show Loading GIF and Hide the Wheel
@@ -91,7 +92,6 @@ async function fetchRestaurants() {
     document.getElementById("wheel").style.display = "block";
   }
 }
-
 
 function updateWheel(restaurants) {
   options.length = 0;
