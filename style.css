@@ -134,8 +134,6 @@ html, body {
   width: 100%; /* Match the new container width */
   margin: 0 auto 20px;
 }
-
-    background-color:rgb(61, 69, 119);
   
 /* 🎡 Ensure `wheel-container` is positioned relative */
 #wheel-container {
