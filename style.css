@@ -10,11 +10,11 @@ html, body {
     height: 500px;
     width: 400px;
     background-color: #ffffff;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2); */
     overflow: hidden;
     margin: 0;
   }  
-  
+
   canvas {
     border-radius: 50%;
     border: 10px solid #fff;
@@ -89,3 +89,7 @@ html, body {
   display: none; /* ✅ Hide initially */
   pointer-events: none; /* ✅ Prevent interaction */
 }
+
+#spin {
+    font-weight: bold;
+  }
