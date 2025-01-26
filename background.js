@@ -5,8 +5,8 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     chrome.notifications.create("lunchTime", {
       type: "basic",
       iconUrl: "assets/icon.png",
-      title: "Hunger Game",
-      message: "It's time for lunch! Open the Hunger Game extension to find your meal.",
+      title: "Lunch Lotto",
+      message: "It's time for lunch! Open the Lunch Lotto extension to find your meal.",
     });
   }
 });

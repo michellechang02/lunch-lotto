@@ -2,7 +2,8 @@ const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
 const options = ["", "", "", "", "", "", "", ""];
-const colors = ["#990000", "#F2F2F2", "#011F5B", "#F2F2F2"];
+const colors = ["#F69C9E", "#BCECE6", "#73D5D1", "#FFEED9"];
+// #051F20 #0B2B26 #163832 #235347 #8EB69B #DAF1DE #F2F2F2
 let startAngle = 0;
 let arc = 2 * Math.PI / options.length;
 let spinTimeout = null;
@@ -10,6 +11,25 @@ let spinAngleStart = 0;
 let spinTime = 0;
 let spinTimeTotal = 0;
 
+function scaleCanvas(canvas, ctx) {
+    const pixelRatio = window.devicePixelRatio || 1;
+  
+    // Save the original canvas dimensions
+    const width = canvas.width;
+    const height = canvas.height;
+  
+    // Set the canvas width and height to the scaled dimensions
+    canvas.width = width * pixelRatio;
+    canvas.height = height * pixelRatio;
+  
+    // Scale the canvas context
+    // ctx.scale(pixelRatio, pixelRatio);
+  
+    // Restore the original canvas dimensions for CSS styling
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+  }
+  
 function isColorDark(color) {
     // Convert hex color to RGB
     const hex = color.replace("#", "");
@@ -27,44 +47,20 @@ function truncateOption(option) {
         return "Loading..."; // Provide a fallback for empty options
       }
 
-    if (option.length > 15) {
-      return option.slice(0, 12) + "..."; // Keep the first 12 characters and add "..."
+    if (option.length > 13) {
+      return option.slice(0, 10) + "..."; // Keep the first 12 characters and add "..."
     }
     return option; // Return the original string if it's 15 characters or less
   }  
-
-  function setHighDPI(canvas, context) {
-    const devicePixelRatio = window.devicePixelRatio || 1;
-    const backingStoreRatio = context.webkitBackingStorePixelRatio ||
-                              context.mozBackingStorePixelRatio ||
-                              context.msBackingStorePixelRatio ||
-                              context.oBackingStorePixelRatio ||
-                              context.backingStorePixelRatio || 1;
   
-    const ratio = devicePixelRatio / backingStoreRatio;
-  
-    // Save the original canvas dimensions
-    const width = canvas.width;
-    const height = canvas.height;
-  
-    // Scale the canvas
-    canvas.width = width * ratio;
-    canvas.height = height * ratio;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-  
-    // Scale the drawing context
-    context.scale(ratio, ratio);
-  }
-  
-function drawWheel() {
+  function drawWheel() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before redrawing
-    
+  
     // Set the font size and style
-    ctx.font = "12px Roboto";
+    ctx.font = "bold 24px Poppins";
   
     options.forEach((option, i) => {
-      const truncatedOption = truncateOption(option); // Truncate the option if necessary
+      const truncatedOption = truncateOption(option.name); // Truncate the option if necessary
       const angle = startAngle + i * arc;
   
       // Draw the segment
@@ -88,41 +84,129 @@ function drawWheel() {
       ctx.save();
       ctx.fillStyle = fontColor; // Set dynamic font color
       ctx.translate(
-        canvas.width / 2 + Math.cos(angle + arc / 2) * (canvas.width / 2 - 40),
-        canvas.height / 2 + Math.sin(angle + arc / 2) * (canvas.height / 2 - 40)
+        canvas.width / 2 + Math.cos(angle + arc / 2) * (canvas.width / 2 - 120),
+        canvas.height / 2 + Math.sin(angle + arc / 2) * (canvas.height / 2 - 120)
       );
       ctx.rotate(angle + arc / 2);
-      ctx.fillText(truncatedOption, -ctx.measureText(truncatedOption).width / 4 * 3, 0); // Use truncated option
+      ctx.fillText(truncatedOption, -ctx.measureText(truncatedOption).width / 2, 0); // Use truncated option
       ctx.restore();
     });
   
-    // Draw the pointer
+    // Draw the pointer and center circle
     drawPointer();
+    drawCenterCircle();
   }  
 
-function drawPointer() {
-    ctx.fillStyle = "#F2C100";
+  function drawCenterCircle() {
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+  
+    // Set shadow properties
+    ctx.save();
+    ctx.shadowBlur = 15; // Shadow blur amount
+    ctx.shadowColor = "rgba(0, 0, 0, 0.25)"; // Shadow color
+  
+    // Draw the shadowed circle
     ctx.beginPath();
-    ctx.moveTo(canvas.width / 2 - 10, 0); // Left corner of the pointer
-    ctx.lineTo(canvas.width / 2 + 10, 0); // Right corner of the pointer
-    ctx.lineTo(canvas.width / 2, 30); // Bottom tip of the pointer
-    ctx.closePath();
+    ctx.arc(centerX, centerY, 50, 0, 2 * Math.PI); // Adjust radius as needed
+    ctx.fillStyle = "white"; // Center circle color
     ctx.fill();
+    ctx.restore();
+  
+    // Add a border to the center circle (optional)
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, 50, 0, 2 * Math.PI);
+    ctx.lineWidth = 5; // Border width
+    ctx.strokeStyle = "#fff"; // Border color
+    ctx.stroke();
   }
 
-function rotateWheel() {
-  spinTime += 30; // Increment spin time
-  if (spinTime >= spinTimeTotal) {
-    finalizeWheel(); // Stop spinning and finalize the result
-    return;
+  function drawPointer() {
+    const centerX = canvas.width / 2; // Center of the canvas
+  
+    // Set shadow properties for the pointer
+    ctx.save(); // Save the current context state
+    ctx.shadowBlur = 15; // Blur amount for the shadow
+    ctx.shadowColor = "rgba(0, 0, 0, 0.25)"; // Shadow color (semi-transparent black)
+    ctx.shadowOffsetX = 0; // Horizontal shadow offset
+    ctx.shadowOffsetY = 5; // Vertical shadow offset
+  
+    // Draw the pointer
+    ctx.beginPath();
+    ctx.moveTo(centerX - 30, 0); // Left corner of the pointer
+    ctx.lineTo(centerX + 30, 0); // Right corner of the pointer
+    ctx.lineTo(centerX, 80); // Bottom tip of the pointer
+    ctx.closePath();
+  
+    // Fill the pointer
+    ctx.fillStyle = "#007BFF"; // Pointer color
+    ctx.fill();
+  
+    // Add a border (with shadow)
+    ctx.lineWidth = 15; // Border thickness
+    ctx.strokeStyle = "#ffffff"; // Border color
+    ctx.stroke();
+    ctx.restore(); // Restore the context state to remove shadow effects for subsequent drawings
+  }  
+  
+  function rotateWheel() {
+    spinTime += 30;
+    if (spinTime >= spinTimeTotal) {
+      clearTimeout(spinTimeout);
+  
+      // Calculate the winning segment based on the final angle
+      const degrees = (startAngle * 180) / Math.PI + 90;
+      const normalizedDegrees = degrees % 360;
+      const selectedIndex = Math.floor(normalizedDegrees / (360 / options.length));
+      const selectedOption = options[options.length - 1 - selectedIndex];
+        
+      // Motivational messages to encourage the user
+      const messages = [
+        "Time to fuel your body with something nutritious! 🍎",
+        "Great choice! Enjoy your healthy meal. 🌱",
+        "A healthy lunch keeps the energy flowing! 💪",
+        "Your body will thank you for this meal. 🥗",
+        "Eating healthy today sets you up for success! 🏆",
+        "Tasty and healthy? You've got it! 🍽️",
+        "Healthy food, happy mood! 😊",
+      ];
+  
+      // Select a random motivational message
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+  
+      // Show result + motivational message
+      swal({
+        title: `Selected Option: ${selectedOption.name}`,
+        content: (() => {
+          const content = document.createElement("div");
+          const paragraph = document.createElement("p");
+          const link = document.createElement("a");
+          
+          paragraph.style.fontSize = "12px";
+          paragraph.textContent = randomMessage; // Add the motivational message
+      
+          link.href = selectedOption.googleMapsLink; // Set the Google Maps link
+          link.target = "_blank"; // Open the link in a new tab
+          link.textContent = "View on Google Maps"; // Text for the link
+          link.style.color = "#a2a2a2"; // Optional: Add a color to the link
+          link.style.fontSize = "10px";
+      
+          content.appendChild(paragraph);
+          content.appendChild(link);
+      
+          return content;
+        })(),
+        icon: "success",
+        button: false, // Hide the default OK button
+      });
+      
+      return;
+    }
+  
+    startAngle += (spinAngleStart * Math.PI) / 180;
+    drawWheel();
+    spinTimeout = setTimeout(rotateWheel, 30);
   }
-
-  spinAngleStart *= 0.98; // Gradually reduce spin speed for a smooth stop
-  startAngle += spinAngleStart * Math.PI / 180;
-  drawWheel();
-
-  spinTimeout = setTimeout(rotateWheel, 30); // Continue spinning
-}
 
 function finalizeWheel() {
   const degrees = (startAngle * 180) / Math.PI + 90; // Convert radians to degrees
@@ -140,4 +224,5 @@ function spin() {
 }
 
 document.getElementById("spin").addEventListener("click", () => spin());
+scaleCanvas(canvas, ctx);
 drawWheel();
