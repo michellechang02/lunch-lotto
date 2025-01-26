@@ -47,8 +47,8 @@ function truncateOption(option) {
         return "Loading..."; // Provide a fallback for empty options
       }
 
-    if (option.length > 15) {
-      return option.slice(0, 12) + "..."; // Keep the first 12 characters and add "..."
+    if (option.length > 13) {
+      return option.slice(0, 10) + "..."; // Keep the first 12 characters and add "..."
     }
     return option; // Return the original string if it's 15 characters or less
   }  
@@ -84,11 +84,11 @@ function truncateOption(option) {
       ctx.save();
       ctx.fillStyle = fontColor; // Set dynamic font color
       ctx.translate(
-        canvas.width / 2 + Math.cos(angle + arc / 2) * (canvas.width / 2 - 40),
-        canvas.height / 2 + Math.sin(angle + arc / 2) * (canvas.height / 2 - 40)
+        canvas.width / 2 + Math.cos(angle + arc / 2) * (canvas.width / 2 - 120),
+        canvas.height / 2 + Math.sin(angle + arc / 2) * (canvas.height / 2 - 120)
       );
       ctx.rotate(angle + arc / 2);
-      ctx.fillText(truncatedOption, -ctx.measureText(truncatedOption).width, 0); // Use truncated option
+      ctx.fillText(truncatedOption, -ctx.measureText(truncatedOption).width / 2, 0); // Use truncated option
       ctx.restore();
     });
   

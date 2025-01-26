@@ -7,7 +7,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 500px;
+    height: 520px;
     width: 400px;
     background-color: #ffffff;
     /* box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2); */
@@ -18,8 +18,8 @@ html, body {
   canvas {
     border-radius: 50%;
     border: 10px solid #fff;
-    width: 300px; /* Layout width */
-    height: 300px; /* Layout height */
+    width: 310px; /* Layout width */
+    height: 310px; /* Layout height */
     display: block; 
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
   }
@@ -142,7 +142,7 @@ background-color:rgb(61, 69, 119);
   position: relative;  /* ✅ This makes the GIF position relative to the wheel */
   text-align: center;
   width: 100%; /* ✅ Prevents overflow */
-  height: 300px; /* ✅ Matches wheel size */
+  height: 310px; /* ✅ Matches wheel size */
   overflow: hidden; /* ✅ Ensures GIF doesn't overflow */
 }
 
@@ -151,8 +151,8 @@ background-color:rgb(61, 69, 119);
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 300px;  /* ✅ Adjust size */
-  height: 300px;
+  width: 310px;  /* ✅ Adjust size */
+  height: 310px;
   max-width: 500px;  /* ✅ Prevents it from getting too large */
   max-height: 500px;
   transform: translate(-50%, -50%);  /* ✅ Centers it */
