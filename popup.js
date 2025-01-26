@@ -87,16 +87,28 @@ async function fetchRestaurants() {
     }
   }  
 
-function updateWheel(restaurants) {
-  options.length = 0;
-  // options.push(...restaurants);
-  options.push(...restaurants.map(r => r.name));
-  restaurantDetails = restaurants.reduce((acc, r) => { 
-    acc[r.name] = r; // ✅ Store full restaurant details
-    return acc;
-  }, {});
-  drawWheel();
-}
+  function updateWheel(restaurants) {
+    options.length = 0; // Clear the current options array
+  
+    // Randomly shuffle the restaurants array
+    const shuffledRestaurants = [...restaurants].sort(() => Math.random() - 0.5);
+  
+    // Choose 8 random restaurants
+    const selectedRestaurants = shuffledRestaurants.slice(0, 8);
+  
+    // Extract restaurant names and populate options array
+    options.push(...selectedRestaurants.map((r) => r.name));
+  
+    // Store full restaurant details in a global object (restaurantDetails)
+    restaurantDetails = selectedRestaurants.reduce((acc, r) => {
+      acc[r.name] = r; // Store each restaurant's details keyed by its name
+      return acc;
+    }, {});
+  
+    // Redraw the wheel with the updated options
+    drawWheel();
+  }
+  
 
 // 🛠️ Toggle Settings View
 function showSettings() {
