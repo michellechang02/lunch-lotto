@@ -34,21 +34,45 @@ Are you tired of wasting time trying to figure out where to eat? Do you always e
 
 ---  
 
-## **Installation Guide**  
+## **Installation Guide**
 
-1. Clone the repository:  
+1. **Clone the repository:**  
    ```bash
    git clone https://github.com/jessie-sr/lunch-lotto.git
    ```  
-2. Open Chrome and navigate to:  
-   ```bash
-   
+
+2. **Replace the Google Maps API Key:**  
+   - Open the `popup.js` file in a code editor (e.g., VS Code).  
+   - Find the line containing:  
+     ```javascript
+     const apiKey = "YOUR_API_KEY";
+     ```
+   - Replace `"YOUR_API_KEY"` with your own **Google Maps API Key**.  
+     Example:  
+     ```javascript
+     const apiKey = "AIzaSy12345EXAMPLE";
+     ```
+
+   - If you don’t have a Google Maps API Key yet, follow these steps:
+     1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+     2. Create or select a project.
+     3. Navigate to **APIs & Services > Credentials** and click **Create Credentials**.
+     4. Select **API Key**, copy the generated key, and replace the placeholder in `popup.js`.
+
+3. **Open Chrome and navigate to:**  
+   ```text
    chrome://extensions/
-   
-   ```  
-3. Enable **Developer Mode** (top-right corner).  
-4. Click **"Load unpacked"** and select the project folder.  
-5. The Lunch Lotto icon will appear in your Chrome toolbar—click it and start spinning!  
+   ```
+
+4. **Enable Developer Mode:**  
+   - Toggle the **Developer Mode** switch in the top-right corner.
+
+5. **Load the Extension:**  
+   - Click **"Load unpacked"** and select the project folder you just cloned.  
+
+6. **Start Using Lunch Lotto:**  
+   - The Lunch Lotto icon will appear in your Chrome toolbar.  
+   - Click the icon, spin the wheel, and let it decide your lunch spot!
 
 
 ---  
