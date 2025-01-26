@@ -60,7 +60,7 @@ function truncateOption(option) {
     ctx.font = "bold 24px Poppins";
   
     options.forEach((option, i) => {
-      const truncatedOption = truncateOption(option); // Truncate the option if necessary
+      const truncatedOption = truncateOption(option.name); // Truncate the option if necessary
       const angle = startAngle + i * arc;
   
       // Draw the segment
@@ -175,8 +175,31 @@ function truncateOption(option) {
       const randomMessage = messages[Math.floor(Math.random() * messages.length)];
   
       // Show result + motivational message
-      alert(`Selected option: ${selectedOption}\n\n${randomMessage}`);
-  
+      swal({
+        title: `Selected Option: ${selectedOption.name}`,
+        content: (() => {
+          const content = document.createElement("div");
+          const paragraph = document.createElement("p");
+          const link = document.createElement("a");
+          
+          paragraph.style.fontSize = "12px";
+          paragraph.textContent = randomMessage; // Add the motivational message
+      
+          link.href = selectedOption.googleMapsLink; // Set the Google Maps link
+          link.target = "_blank"; // Open the link in a new tab
+          link.textContent = "View on Google Maps"; // Text for the link
+          link.style.color = "#a2a2a2"; // Optional: Add a color to the link
+          link.style.fontSize = "10px";
+      
+          content.appendChild(paragraph);
+          content.appendChild(link);
+      
+          return content;
+        })(),
+        icon: "success",
+        button: false, // Hide the default OK button
+      });
+      
       return;
     }
   

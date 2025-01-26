@@ -46,7 +46,8 @@ async function fetchRestaurants() {
           price: place.price_level ? "$".repeat(place.price_level) : "Unknown",
           lat: place.geometry.location.lat,
           lng: place.geometry.location.lng,
-          placeId: place.place_id
+          placeId: place.place_id,
+          googleMapsLink: `https://www.google.com/maps/place/?q=place_id:${place.place_id}`, // Add Google Maps link
         }));
   
         // ✅ Remove duplicate restaurant names
@@ -96,19 +97,26 @@ async function fetchRestaurants() {
     // Choose 8 random restaurants
     const selectedRestaurants = shuffledRestaurants.slice(0, 8);
   
-    // Extract restaurant names and populate options array
-    options.push(...selectedRestaurants.map((r) => r.name));
+    // Extract restaurant names and Google Maps links, and populate options array
+    options.push(...selectedRestaurants.map((restaurant) => ({
+      name: restaurant.name,
+      googleMapsLink: restaurant.googleMapsLink, // Add Google Maps link
+    })));
   
-    // Store full restaurant details in a global object (restaurantDetails)
-    restaurantDetails = selectedRestaurants.reduce((acc, r) => {
-      acc[r.name] = r; // Store each restaurant's details keyed by its name
-      return acc;
-    }, {});
+    // Debugging: Log the selected restaurants with their links
+    console.log("✅ Options for the Wheel:", options);
+  
+    // Store full restaurant details, including names and links
+    restaurantDetails = selectedRestaurants.map((restaurant) => ({
+      name: restaurant.name,
+      googleMapsLink: restaurant.googleMapsLink // Add the Google Maps link
+    }));
+  
+    console.log("✅ Selected Restaurants for the Wheel:", restaurantDetails);
   
     // Redraw the wheel with the updated options
     drawWheel();
-  }
-  
+  }  
 
 // 🛠️ Toggle Settings View
 function showSettings() {

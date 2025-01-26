@@ -160,3 +160,18 @@ background-color:rgb(61, 69, 119);
   display: none; /* ✅ Hide initially */
   pointer-events: none; /* ✅ Prevent interaction */
 }
+
+.swal-modal {
+  width: 300px !important; /* Set desired width */
+  height: 300px !important; /* Adjust height dynamically */
+  font-size: 16px !important; /* Adjust font size */
+  padding: 10px !important; /* Adjust padding */
+}
+
+.swal-text {
+  font-size: 12px !important; /* Customize the message text size */
+}
+
+.swal-title {
+  font-size: 18px !important; /* Customize the title text size */
+}
