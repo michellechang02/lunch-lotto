@@ -163,7 +163,7 @@ background-color:rgb(61, 69, 119);
 
 .swal-modal {
   width: 300px !important; /* Set desired width */
-  height: 300px !important; /* Adjust height dynamically */
+  height: 320px !important; /* Adjust height dynamically */
   font-size: 16px !important; /* Adjust font size */
   padding: 10px !important; /* Adjust padding */
 }

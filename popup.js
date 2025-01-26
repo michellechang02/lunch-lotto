@@ -154,7 +154,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   
     // Save the updated settings
     chrome.storage.sync.set({ distance, price }, async () => {
-      alert("Settings saved!");
+      swal({
+        title: `Settings saved!`,
+        icon: "success",
+        button: false, // Hide the default OK button
+      });
   
       // Hide the settings view and fetch new restaurants
       hideSettings();

@@ -11,7 +11,12 @@ document.getElementById("save").addEventListener("click", async () => {
   
     // Save the new settings in Chrome storage
     chrome.storage.sync.set({ distance, price }, async () => {
-      alert("Settings saved!");
+      // alert("Settings saved!");
+      swal({
+        title: `Settings saved!`,
+        icon: "success",
+        button: false, // Hide the default OK button
+      });
   
       // Fetch new restaurants and update the wheel
       await fetchRestaurants();
