@@ -56,7 +56,7 @@ Are you tired of wasting time trying to figure out where to eat? Do you always e
 ## **Demo**  
 
 Watch our demo video to see Lunch Lotto in action:  
-[Watch the Demo](https://youtu.be/i_liACGagPY)
+[Hackathon 2025 - Lunch Lotto](https://youtu.be/i_liACGagPY)
 
 ---  
 
