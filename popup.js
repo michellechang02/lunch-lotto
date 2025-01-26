@@ -140,13 +140,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("price").value = settings.price;
 
   // Save settings
-  document.getElementById("save-settings").addEventListener("click", () => {
+  document.getElementById("save-settings").addEventListener("click", async () => {
     const distance = parseFloat(document.getElementById("distance").value);
     const price = document.getElementById("price").value;
-
-    chrome.storage.sync.set({ distance, price }, () => {
+  
+    // Save the updated settings
+    chrome.storage.sync.set({ distance, price }, async () => {
       alert("Settings saved!");
+  
+      // Hide the settings view and fetch new restaurants
       hideSettings();
+      await fetchRestaurants(); // Fetch restaurants with the new settings
     });
-  });
+  });  
 });

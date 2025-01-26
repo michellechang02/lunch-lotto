@@ -5,14 +5,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-document.getElementById("save").addEventListener("click", () => {
-  const distance = parseFloat(document.getElementById("distance").value);
-  const price = document.getElementById("price").value;
-
-  chrome.storage.sync.set({ distance, price }, () => {
-    alert("Settings saved!");
-  });
-});
+document.getElementById("save").addEventListener("click", async () => {
+    const distance = parseFloat(document.getElementById("distance").value);
+    const price = document.getElementById("price").value;
+  
+    // Save the new settings in Chrome storage
+    chrome.storage.sync.set({ distance, price }, async () => {
+      alert("Settings saved!");
+  
+      // Fetch new restaurants and update the wheel
+      await fetchRestaurants();
+    });
+  });  
 
 document.getElementById("settings").addEventListener("click", () => {
   chrome.runtime.openOptionsPage();
