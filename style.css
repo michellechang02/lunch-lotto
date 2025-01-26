@@ -88,9 +88,10 @@ html, body {
 /* Label Styling */
 #settings-view label {
   display: block;
+  font-weight: bold;
   font-size: 1rem;
   margin: 10px 0 5px;
-  color: #555;
+  color: #000；
 }
 
 /* Input and Select Styling */
@@ -100,9 +101,10 @@ html, body {
   width: 70%; /* Adjust width to match the new container size */
   padding: 10px;
   margin-bottom: 15px;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 10px;
   font-size: 1rem;
+  color: #555;
 }
 
 /* Button Styling */
@@ -111,6 +113,7 @@ html, body {
   padding: 12px;
   margin: 10px 2.5%; /* Space buttons evenly */
   font-size: 1rem;
+  font-weight: bold;
   color: #fff;
   background-color: #007BFF;
   
