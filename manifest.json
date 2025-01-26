@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Hunger Game",
+    "name": "Lunch Lotto",
     "version": "1.0",
     "description": "A fun lunch recommendation tool with healthy options!",
     "permissions": ["notifications", "storage", "alarms", "geolocation"],
