@@ -139,7 +139,7 @@ function truncateOption(option) {
     ctx.closePath();
   
     // Fill the pointer
-    ctx.fillStyle = "#000000"; // Pointer color
+    ctx.fillStyle = "#007BFF"; // Pointer color
     ctx.fill();
   
     // Add a border (with shadow)
@@ -203,4 +203,3 @@ function spin() {
 document.getElementById("spin").addEventListener("click", () => spin());
 scaleCanvas(canvas, ctx);
 drawWheel();
-

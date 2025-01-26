@@ -29,7 +29,7 @@ html, body {
     margin-top: 26px;
     margin-left: 60px;
     padding: 10px 20px;
-    background-color: #060707;
+    background-color: #007BFF;
     color: white;
     border: none;
     border-radius: 10px;
@@ -38,7 +38,12 @@ html, body {
   }
   
   button:hover {
-    background-color: #0f0f13;
+    background-color: #0056b3;
+  }
+
+
+#spin {
+    font-weight: bold;
   }
   
 /* Style for the Settings Button */
@@ -62,6 +67,69 @@ html, body {
 
 #open-settings img:hover {
   transform: scale(1.1); /* Slightly enlarge on hover for interactivity */
+}
+
+/* General Styling for Settings View */
+#settings-view {
+  display: none;
+  background-color: #ffffff;
+  /* border-radius: 15px; */
+  padding: 20px;
+  text-align: center;
+  width: 90%; /* Make the settings view wider */
+  margin: auto; /* Center the box */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow-y: auto; /* Add scroll if content exceeds the view */
+}
+
+/* Label Styling */
+#settings-view label {
+  display: block;
+  font-size: 1rem;
+  margin: 10px 0 5px;
+  color: #555;
+}
+
+/* Input and Select Styling */
+#settings-view input[type="text"],
+#settings-view input[type="number"],
+#settings-view select {
+  width: 70%; /* Adjust width to match the new container size */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+/* Button Styling */
+#settings-view button {
+  width: 45%; /* Make buttons slightly larger */
+  padding: 12px;
+  margin: 10px 2.5%; /* Space buttons evenly */
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007BFF;
+  
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#settings-view button:hover {
+  background-color: #0056b3;
+}
+
+/* Align inputs and buttons */
+#settings-view .form-group {
+  margin-bottom: 10px;
+  text-align: center;
+  width: 100%; /* Match the new container width */
+  margin: 0 auto 20px;
 }
 
     background-color:rgb(61, 69, 119);
@@ -89,7 +157,3 @@ html, body {
   display: none; /* ✅ Hide initially */
   pointer-events: none; /* ✅ Prevent interaction */
 }
-
-#spin {
-    font-weight: bold;
-  }
