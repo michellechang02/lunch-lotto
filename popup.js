@@ -1,15 +1,18 @@
-const apiKey = "YOUR_API_KEY";
+// In production, consider:
+// 1. Using chrome.storage to store the key securely
+// 2. Fetching it from a secure backend
+// 3. Using Chrome's identity API for authentication
+
 const defaultSettings = {
-  distance: 0.5,       // Default search radius in miles
-  price: "2,3",        // Google Places API uses 1-4 ($ - $$$$)
-  dietary: "",         // Empty means no filter (future: vegetarian, gluten-free, etc.)
+  distance: 0.5,
+  price: "2,3",
+  dietary: "",
 };
-// Convert miles to meters (Google Maps API uses meters)
+
 function milesToMeters(miles) {
   return miles * 1609.34;
 }
 
-// Load user settings or use defaults
 async function loadSettings() {
   return new Promise((resolve) => {
     chrome.storage.sync.get(defaultSettings, (settings) => {
@@ -18,107 +21,129 @@ async function loadSettings() {
   });
 }
 
+async function loadHistory() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get({ history: [] }, (data) => {
+      resolve(data.history);
+    });
+  });
+}
+
+async function saveHistory(newEntry) {
+  const history = await loadHistory();
+  history.unshift(newEntry);
+  if (history.length > 10) history.pop();
+  chrome.storage.sync.set({ history });
+}
+
+async function clearHistory() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.set({ history: [] }, () => {
+      resolve();
+    });
+  });
+}
+
+async function updateHistoryView() {
+  const history = await loadHistory();
+  const historyList = document.getElementById("history-list");
+  historyList.innerHTML = "";
+
+  if (history.length === 0) {
+    historyList.innerHTML = "<li>No history yet</li>";
+    return;
+  }
+
+  history.forEach((item) => {
+    let listItem = document.createElement("li");
+    listItem.textContent = item;
+    historyList.appendChild(listItem);
+  });
+}
+
 async function fetchRestaurants() {
-    try {
-      // 🔄 Show Loading GIF and Hide the Wheel
-      document.getElementById("loading-gif").style.display = "block";
-      document.getElementById("wheel").style.display = "none";
-  
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude: lat, longitude: lng } = position.coords;
-        const settings = await loadSettings();
-  
-        const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${milesToMeters(settings.distance)}&type=restaurant&keyword=healthy&minprice=${settings.price[0]}&maxprice=${settings.price[2]}&key=${apiKey}`;
-  
-        const response = await fetch(url);
-        const data = await response.json();
-  
-        if (!data.results || data.results.length === 0) {
-          console.error("❌ No restaurants found!");
-          alert("No restaurants found! Try adjusting your settings.");
-          return;
-        }
-  
-        // ✅ Extract restaurant data
-        let restaurants = data.results.map((place) => ({
-          name: place.name,
-          distance: (settings.distance).toFixed(1),
-          price: place.price_level ? "$".repeat(place.price_level) : "Unknown",
-          lat: place.geometry.location.lat,
-          lng: place.geometry.location.lng,
-          placeId: place.place_id,
-          googleMapsLink: `https://www.google.com/maps/place/?q=place_id:${place.place_id}`, // Add Google Maps link
-        }));
-  
-        // ✅ Remove duplicate restaurant names
-        const seen = new Set();
-        restaurants = restaurants.filter((restaurant) => {
-          if (seen.has(restaurant.name)) {
-            return false; // Duplicate found, skip this restaurant
-          }
-          seen.add(restaurant.name);
-          return true; // Unique restaurant, keep it
-        });
-  
-        console.log("✅ Unique Restaurants fetched:", restaurants);
-  
-        // ✅ Store restaurant details globally
-        restaurantDetails = restaurants.reduce((acc, r) => {
-          acc[r.name] = r;
-          return acc;
-        }, {});
-  
-        // ⏳ Wait 5 seconds before showing the wheel
-        setTimeout(() => {
-          document.getElementById("loading-gif").style.display = "none"; // ✅ Hide Loading GIF
-          document.getElementById("wheel").style.display = "block"; // ✅ Show the wheel
-          updateWheel(restaurants); // ✅ Update the wheel with restaurant names
-        }, 2000);
-  
-      }, (error) => {
-        console.error("❌ Geolocation error:", error);
-        alert("Please enable location access to fetch restaurants.");
-        document.getElementById("loading-gif").style.display = "none"; // ✅ Hide loading GIF on error
-        document.getElementById("wheel").style.display = "block";
+  try {
+    document.getElementById("loading-gif").style.display = "block";
+    document.getElementById("wheel").style.display = "none";
+
+    // Get user's current location
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const radius = milesToMeters(defaultSettings.distance); // Convert miles to meters
+
+      // OpenStreetMap Overpass API query
+      const query = `
+        [out:json];
+        node(around:${radius},${lat},${lon})["amenity"="restaurant"];
+        out;
+      `;
+      const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (!data.elements || data.elements.length === 0) {
+        alert("No results found! Try adjusting your settings.");
+        return;
+      }
+
+      let results = data.elements.map((place) => ({
+        name: place.tags.name || "Unnamed Restaurant",
+        googleMapsLink: `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lon}`
+      }));
+
+      // Remove duplicates
+      const seen = new Set();
+      results = results.filter((result) => {
+        if (seen.has(result.name)) return false;
+        seen.add(result.name);
+        return true;
       });
-    } catch (error) {
-      console.error("❌ Error fetching restaurants:", error);
-      document.getElementById("loading-gif").style.display = "none"; // ✅ Hide loading GIF on error
+
+      setTimeout(() => {
+        document.getElementById("loading-gif").style.display = "none";
+        document.getElementById("wheel").style.display = "block";
+        updateWheel(results);
+      }, 2000);
+    }, (error) => {
+      console.error("Error getting location:", error);
+      alert("Location access is required to find nearby restaurants.");
+      document.getElementById("loading-gif").style.display = "none";
       document.getElementById("wheel").style.display = "block";
-    }
-  }  
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    document.getElementById("loading-gif").style.display = "none";
+    document.getElementById("wheel").style.display = "block";
+  }
+}
 
-  function updateWheel(restaurants) {
-    options.length = 0; // Clear the current options array
-  
-    // Randomly shuffle the restaurants array
-    const shuffledRestaurants = [...restaurants].sort(() => Math.random() - 0.5);
-  
-    // Choose 8 random restaurants
-    const selectedRestaurants = shuffledRestaurants.slice(0, 8);
-  
-    // Extract restaurant names and Google Maps links, and populate options array
-    options.push(...selectedRestaurants.map((restaurant) => ({
-      name: restaurant.name,
-      googleMapsLink: restaurant.googleMapsLink, // Add Google Maps link
-    })));
-  
-    // Debugging: Log the selected restaurants with their links
-    console.log("✅ Options for the Wheel:", options);
-  
-    // Store full restaurant details, including names and links
-    restaurantDetails = selectedRestaurants.map((restaurant) => ({
-      name: restaurant.name,
-      googleMapsLink: restaurant.googleMapsLink // Add the Google Maps link
-    }));
-  
-    console.log("✅ Selected Restaurants for the Wheel:", restaurantDetails);
-  
-    // Redraw the wheel with the updated options
-    drawWheel();
-  }  
 
-// 🛠️ Toggle Settings View
+function updateWheel(restaurants) {
+  options.length = 0;
+  const shuffledRestaurants = [...restaurants].sort(() => Math.random() - 0.5);
+  const selectedRestaurants = shuffledRestaurants.slice(0, 8);
+
+  options.push(...selectedRestaurants);
+  drawWheel();
+}
+
+function spin() {
+  if (options.length === 0) {
+    alert("No restaurants available. Try refreshing!");
+    return;
+  }
+
+  const selected = options[Math.floor(Math.random() * options.length)];
+  document.getElementById("selected-restaurant").textContent = selected.name;
+  document.getElementById("google-maps-link").href = selected.googleMapsLink;
+  document.getElementById("google-maps-link").style.display = "block";
+  document.getElementById("result-container").style.display = "block";
+
+  saveHistory(selected.name);
+}
+
 function showSettings() {
   document.getElementById("main-view").style.display = "none";
   document.getElementById("settings-view").style.display = "block";
@@ -129,40 +154,51 @@ function hideSettings() {
   document.getElementById("settings-view").style.display = "none";
 }
 
-// Ensure scripts run only after DOM is loaded
+function showHistory() {
+  document.getElementById("main-view").style.display = "none";
+  document.getElementById("history-view").style.display = "block";
+  updateHistoryView();
+}
+
+function hideHistory() {
+  document.getElementById("main-view").style.display = "block";
+  document.getElementById("history-view").style.display = "none";
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   await fetchRestaurants();
+  await updateHistoryView();
 
-  // Spin button event
-  document.getElementById("spin").addEventListener("click", () => spin());
-
-  // Open settings view
+  document.getElementById("spin").addEventListener("click", function() {
+    window.spinWheel();
+  });
   document.getElementById("open-settings").addEventListener("click", showSettings);
-
-  // Close settings view
   document.getElementById("close-settings").addEventListener("click", hideSettings);
+  document.getElementById("open-history").addEventListener("click", showHistory);
+  document.getElementById("close-history").addEventListener("click", hideHistory);
+  document.getElementById("clear-history").addEventListener("click", async () => {
+    await clearHistory();
+    await updateHistoryView();
+    swal({ title: "History cleared!", icon: "success", button: false, timer: 1500 });
+  });
 
-  // Load saved settings into inputs
   const settings = await loadSettings();
   document.getElementById("distance").value = settings.distance;
   document.getElementById("price").value = settings.price;
 
-  // Save settings
   document.getElementById("save-settings").addEventListener("click", async () => {
     const distance = parseFloat(document.getElementById("distance").value);
     const price = document.getElementById("price").value;
-  
-    // Save the updated settings
+
     chrome.storage.sync.set({ distance, price }, async () => {
-      swal({
-        title: `Settings saved!`,
-        icon: "success",
-        button: false, // Hide the default OK button
-      });
-  
-      // Hide the settings view and fetch new restaurants
+      swal({ title: "Settings saved!", icon: "success", button: false });
       hideSettings();
-      await fetchRestaurants(); // Fetch restaurants with the new settings
+      await fetchRestaurants();
     });
-  });  
+  });
+
+  // Add event listener for the close result button
+  document.getElementById("close-result").addEventListener("click", function() {
+    document.getElementById("result-container").style.display = "none";
+  });
 });

@@ -9,22 +9,20 @@ html, body {
     justify-content: center;
     height: 520px;
     width: 400px;
-    background-color: #ffffff;
-    /* box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2); */
+    background-color: #ffffff; /* Set background to white */
     overflow: hidden;
     margin: 0;
-  }  
+}  
 
-  canvas {
+canvas {
     border-radius: 50%;
     border: 10px solid #fff;
     width: 310px; /* Layout width */
     height: 310px; /* Layout height */
     display: block; 
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
-  }
-  
-  button {
+}
+
+button {
     font-family: 'Poppins', sans-serif;
     margin-top: 26px;
     margin-left: 60px;
@@ -35,17 +33,16 @@ html, body {
     border-radius: 10px;
     cursor: pointer;
     width: 60%;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
+}
 
+button:hover {
+    background-color: #0056b3;
+}
 
 #spin {
     font-weight: bold;
-  }
-  
+}
+
 /* Style for the Settings Button */
 #open-settings {
   background: none; /* No default button background */
@@ -134,16 +131,183 @@ html, body {
   width: 100%; /* Match the new container width */
   margin: 0 auto 20px;
 }
+/* Style for the History Button */
+#open-history {
+    background: none;
+    border: none;
+    margin: 10px;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+}
 
-background-color:rgb(61, 69, 119);
-  
-/* 🎡 Ensure `wheel-container` is positioned relative */
-#wheel-container {
-  position: relative;  /* ✅ This makes the GIF position relative to the wheel */
+#open-history img {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease;
+}
+
+#open-history img:hover {
+    transform: scale(1.1);
+}
+
+/* Style for History View */
+#history-view {
+    display: none;
+    background-color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    width: 90%;
+    height: 80%;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#history-view h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #000;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#history-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 auto 20px;
+    width: 100%;
+    overflow-y: auto;
+    flex-grow: 1;
+    max-height: 300px;
+}
+
+#history-list li {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #555;
+    text-align: center;
+}
+
+#history-list li:last-child {
+    margin-bottom: 15px;
+}
+
+#close-history {
+    width: 48%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+#close-history:hover {
+    background-color: #0056b3;
+}
+
+/* Style for the history buttons container */
+.history-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 10px;
+    width: 100%;
+}
+
+/* Style for Clear History button */
+#clear-history {
+    width: 48%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+    background-color: #dc3545;
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#clear-history:hover {
+    background-color: #c82333;
+}
+
+#clear-history img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+/* Adjust result container to appear centered over the wheel */
+#result-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   text-align: center;
-  width: 100%; /* ✅ Prevents overflow */
-  height: 310px; /* ✅ Matches wheel size */
-  overflow: hidden; /* ✅ Ensures GIF doesn't overflow */
+  z-index: 100; /* Ensure it's above everything else */
+  width: 80%;
+  max-width: 300px;
+}
+
+/* Make sure the result container has a proper background and shadow */
+#result-container {
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid #ddd;
+}
+
+/* Style the selected restaurant text to be more prominent */
+#selected-restaurant {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+  padding-top: 10px;
+}
+
+#google-maps-link {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#google-maps-link:hover {
+    background-color: #0056b3;
 }
 
 /* 🔄 Loading GIF: Centered Inside the Wheel */
@@ -174,4 +338,30 @@ background-color:rgb(61, 69, 119);
 
 .swal-title {
   font-size: 18px !important; /* Customize the title text size */
+}
+
+/* Close button for result container */
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 25px;
+  height: 25px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.close-btn:hover {
+  background-color: #d32f2f;
 }

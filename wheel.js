@@ -10,6 +10,7 @@ let spinTimeout = null;
 let spinAngleStart = 0;
 let spinTime = 0;
 let spinTimeTotal = 0;
+let spinning = false; // Track if wheel is currently spinning
 
 function scaleCanvas(canvas, ctx) {
     const pixelRatio = window.devicePixelRatio || 1;
@@ -153,57 +154,30 @@ function truncateOption(option) {
     spinTime += 30;
     if (spinTime >= spinTimeTotal) {
       clearTimeout(spinTimeout);
+      spinning = false;
   
       // Calculate the winning segment based on the final angle
-      const degrees = (startAngle * 180) / Math.PI + 90;
-      const normalizedDegrees = degrees % 360;
-      const selectedIndex = Math.floor(normalizedDegrees / (360 / options.length));
-      const selectedOption = options[options.length - 1 - selectedIndex];
-        
-      // Motivational messages to encourage the user
-      const messages = [
-        "Time to fuel your body with something nutritious! 🍎",
-        "Great choice! Enjoy your healthy meal. 🌱",
-        "A healthy lunch keeps the energy flowing! 💪",
-        "Your body will thank you for this meal. 🥗",
-        "Eating healthy today sets you up for success! 🏆",
-        "Tasty and healthy? You've got it! 🍽️",
-        "Healthy food, happy mood! 😊",
-      ];
-  
-      // Select a random motivational message
-      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-  
-      // Show result + motivational message
-      swal({
-        title: `Selected Option: ${selectedOption.name}`,
-        content: (() => {
-          const content = document.createElement("div");
-          const paragraph = document.createElement("p");
-          const link = document.createElement("a");
-          
-          paragraph.style.fontSize = "12px";
-          paragraph.textContent = randomMessage; // Add the motivational message
+      const degrees = startAngle * 180 / Math.PI + 90;
+      const arcd = 360 / options.length;
+      const index = Math.floor((360 - degrees % 360) / arcd);
+      const selectedOption = options[index];
       
-          link.href = selectedOption.googleMapsLink; // Set the Google Maps link
-          link.target = "_blank"; // Open the link in a new tab
-          link.textContent = "View on Google Maps"; // Text for the link
-          link.style.color = "#a2a2a2"; // Optional: Add a color to the link
-          link.style.fontSize = "10px";
+      // Display the result
+      document.getElementById("selected-restaurant").textContent = selectedOption.name;
+      document.getElementById("google-maps-link").href = selectedOption.googleMapsLink;
+      document.getElementById("google-maps-link").style.display = "block";
+      document.getElementById("result-container").style.display = "block";
       
-          content.appendChild(paragraph);
-          content.appendChild(link);
-      
-          return content;
-        })(),
-        icon: "success",
-        button: false, // Hide the default OK button
-      });
+      // Save to history
+      saveHistory(selectedOption.name);
       
       return;
     }
   
-    startAngle += (spinAngleStart * Math.PI) / 180;
+    // Slow down the spin gradually
+    spinAngleStart = spinAngleStart * 0.97; // Slightly slower deceleration
+    
+    startAngle += spinAngleStart * Math.PI / 180;
     drawWheel();
     spinTimeout = setTimeout(rotateWheel, 30);
   }
@@ -217,12 +191,23 @@ function finalizeWheel() {
 }
 
 function spin() {
-  spinAngleStart = Math.random() * 10 + 10;
+  // Prevent multiple spins
+  if (spinning) return;
+  spinning = true;
+  
+  // Hide any previous result
+  document.getElementById("result-container").style.display = "none";
+  
+  // Set initial spin speed (higher value = faster spin)
+  spinAngleStart = Math.random() * 15 + 25; // Faster initial spin
   spinTime = 0;
-  spinTimeTotal = Math.random() * 3000 + 3000; // Spin duration between 3-6 seconds
+  spinTimeTotal = Math.random() * 2000 + 3000; // Spin duration between 3-5 seconds
   rotateWheel();
 }
 
-document.getElementById("spin").addEventListener("click", () => spin());
+// Make sure spin function is globally accessible
+window.spinWheel = spin;
+
+// Initialize the wheel
 scaleCanvas(canvas, ctx);
 drawWheel();
